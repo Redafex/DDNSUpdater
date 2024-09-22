@@ -1,0 +1,3 @@
+ddns_name: example.com
+update_length: 1 # in minutes
+api_key: exampleapikey123 # your api key for dynuddns
