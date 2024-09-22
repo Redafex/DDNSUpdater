@@ -21,7 +21,7 @@ public class Config {
     public Config() throws IOException, URISyntaxException {
         File cfg = new File("config.yml");
 
-        System.out.println(cfg.exists() ? "Config file alreaddy exists" : "Config file doesn't exists ----- Attempting to create a new one");
+        System.out.println(cfg.exists() ? "Config file already exists" : "Config file doesn't exists ----- Attempting to create a new one");
 
         if (!cfg.exists()) {
             System.out.println(yml.getClass().getResource("/defaultConfig.yml"));

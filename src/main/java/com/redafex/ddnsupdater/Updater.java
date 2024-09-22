@@ -11,23 +11,35 @@ import org.apache.http.util.EntityUtils;
 import javax.json.*;
 import java.io.IOException;
 import java.io.StringReader;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Objects;
 
 public class Updater {
 
     static CloseableHttpClient client = HttpClients.custom().build();
     static HttpPost post;
-    static boolean failed = true;
-    static String ip;
+    static boolean failed = false;
+    static String ip = "";
+
+    static SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd HH:mm:ss");
+    static long epoch = 0;
+
+
     public static void check() {
         while (true) {
             try {
-                Thread.sleep((long) Main.config.options.updateTime);
+                epoch = System.currentTimeMillis();
+                Thread.sleep((long) Main.config.options.updateTime * 1000);
+                if(getIP().equals(ip) && !failed){
+                    continue;
+                }
+                System.out.print("Updated ip " + ip);
                 ip = getIP();
-
-                if (failed) UpdateDdns();
+                System.out.println(" ----------> " + ip + " on " + dateFormat.format(new Date(epoch)));
+                UpdateDdns();
                 failed = false;
-
             } catch (Exception e) {
                 failed = true;
                 System.out.println("##### Currently offline #####");
