@@ -8,6 +8,7 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonValue;
 import java.io.*;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -25,10 +26,9 @@ public class Config {
         System.out.println(cfg.exists() ? "Config file already exists" : "Config file doesn't exists ----- Attempting to create a new one");
 
         if (!cfg.exists()) {
-            System.out.println(yml.getClass().getResource("/defaultConfig.yml"));
             System.out.println(Files.copy(
-                    new File(yml.getClass().getResource("/defaultConfig.yml").toURI()).toPath(),
-                    cfg.toPath(), StandardCopyOption.REPLACE_EXISTING).toAbsolutePath());
+                    this.getClass().getResourceAsStream("/defaultConfig.yml"),
+                    cfg.toPath(), StandardCopyOption.REPLACE_EXISTING));
         }
 
         HashMap<String, Object> loaded = yml.load(Files.newInputStream(cfg.toPath()));
