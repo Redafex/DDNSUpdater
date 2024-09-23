@@ -16,7 +16,7 @@ public class Updater {
     static CloseableHttpClient client = HttpClients.custom().build();
     static HttpPost post;
 
-    static boolean failed = false;
+    static boolean failed = true;
     static String ip = "";
 
     static SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd HH:mm:ss");
@@ -55,6 +55,7 @@ public class Updater {
     }
 
     public static void UpdateDdns() throws Exception{
-        post.setEntity(new StringEntity("{ \"name\": \"redafex.freeddns.com\",\"ipv4Address\": \""+ ip +"\",\"ttl\": 90,}", ContentType.APPLICATION_JSON));
+        post.setEntity(new StringEntity("{ \"name\": " + Main.config.options.ddnsName + ",\"ipv4Address\": \""+ ip +"\",\"ttl\": 90,}", ContentType.APPLICATION_JSON));
+        client.execute(post);
     }
 }

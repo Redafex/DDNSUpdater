@@ -37,7 +37,6 @@ public class Config {
         options.ddnsName = (String) loaded.get("ddns_name");
         // double casting to make it unnecessary for the user to put 'f' as a suffix
         options.updateTime = (long) ((float) ((int) loaded.get("update_length")) * 1000);
-
         options.id = getId(options.ddnsName);
         System.out.println("### ID found ###");
     }
