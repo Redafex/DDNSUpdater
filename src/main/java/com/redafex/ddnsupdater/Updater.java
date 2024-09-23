@@ -39,8 +39,8 @@ public class Updater {
                 }
                 System.out.print("Updated ip " + ip);
                 ip = getIP();
-                System.out.println(" ----------> " + ip + " on " + dateFormat.format(new Date(epoch)));
                 UpdateDdns();
+                System.out.println(" ----------> " + ip + " on " + dateFormat.format(new Date(epoch)));
                 failed = false;
             } catch (Exception e) {
                 failed = true;
@@ -55,7 +55,7 @@ public class Updater {
     }
 
     public static void UpdateDdns() throws Exception{
-        post.setEntity(new StringEntity("{ \"name\": " + Main.config.options.ddnsName + ",\"ipv4Address\": \""+ ip +"\",\"ttl\": 90,}", ContentType.APPLICATION_JSON));
+        post.setEntity(new StringEntity("{ \"name\": \"" + Main.config.options.ddnsName + "\",\"ipv4Address\": \""+ ip +"\",\"ttl\": 90,}", ContentType.APPLICATION_JSON));
         client.execute(post);
     }
 }
