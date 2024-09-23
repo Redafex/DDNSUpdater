@@ -28,10 +28,10 @@ public class Updater {
         while (true) {
             try {
                 epoch = System.currentTimeMillis();
-                if (epoch < nextExc) continue;
-                nextExc = epoch + Main.config.options.updateTime;
+//                if (epoch < nextExc) continue;
+//                nextExc = epoch + Main.config.options.updateTime;
 
-//                Thread.sleep(Main.config.options.updateTime);
+                Thread.sleep(Main.config.options.updateTime); // better for cpu apparently
 
 
                 if(getIP().equals(ip) && !failed){
