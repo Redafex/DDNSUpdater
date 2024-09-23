@@ -15,17 +15,17 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class Config {
-    private Yaml yml = new Yaml();
+
     Options options;
 
     public Config() throws IOException, URISyntaxException {
         File cfg = new File("config.yml");
+        Yaml yml = new Yaml();
 
         System.out.println(cfg.exists() ? "Config file already exists" : "Config file doesn't exists ----- Attempting to create a new one");
 
         if (!cfg.exists()) {
             System.out.println(yml.getClass().getResource("/defaultConfig.yml"));
-            cfg.createNewFile();
             System.out.println(Files.copy(
                     new File(yml.getClass().getResource("/defaultConfig.yml").toURI()).toPath(),
                     cfg.toPath(), StandardCopyOption.REPLACE_EXISTING).toAbsolutePath());
@@ -36,7 +36,7 @@ public class Config {
         options.apiKey = (String) loaded.get("api_key");
         options.ddnsName = (String) loaded.get("ddns_name");
         // double casting to make it unnecessary for the user to put 'f' as a suffix
-        options.updateTime = (float) ((int) loaded.get("update_length"));
+        options.updateTime = (long) ((float) ((int) loaded.get("update_length")) * 1000);
 
         options.id = getId(options.ddnsName);
         System.out.println("### ID found ###");
@@ -49,7 +49,6 @@ public class Config {
         get.addHeader("API-Key", options.apiKey);
 
         String res = EntityUtils.toString(Updater.client.execute(get).getEntity());
-
         JsonArray jsonArr = Json.createReader(new StringReader(res)).readObject().getJsonArray("domains");
 
         for (JsonValue val : jsonArr){
@@ -64,7 +63,7 @@ public class Config {
     class Options{
         public String apiKey;
         public String ddnsName;
-        public float updateTime;
+        public long updateTime;
         public int id;
     }
 }

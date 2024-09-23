@@ -8,30 +8,32 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import javax.json.*;
-import java.io.IOException;
-import java.io.StringReader;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
-import java.util.Objects;
 
 public class Updater {
 
     static CloseableHttpClient client = HttpClients.custom().build();
     static HttpPost post;
+
     static boolean failed = false;
     static String ip = "";
 
     static SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd HH:mm:ss");
     static long epoch = 0;
 
+    static long nextExc = System.currentTimeMillis();
 
     public static void check() {
         while (true) {
             try {
                 epoch = System.currentTimeMillis();
-                Thread.sleep((long) Main.config.options.updateTime * 1000);
+                if (epoch < nextExc) continue;
+                nextExc = epoch + Main.config.options.updateTime;
+
+//                Thread.sleep(Main.config.options.updateTime);
+
+
                 if(getIP().equals(ip) && !failed){
                     continue;
                 }
@@ -54,7 +56,5 @@ public class Updater {
 
     public static void UpdateDdns() throws Exception{
         post.setEntity(new StringEntity("{ \"name\": \"redafex.freeddns.com\",\"ipv4Address\": \""+ ip +"\",\"ttl\": 90,}", ContentType.APPLICATION_JSON));
-
-        System.out.println(EntityUtils.toString(client.execute(post).getEntity()));
     }
 }
