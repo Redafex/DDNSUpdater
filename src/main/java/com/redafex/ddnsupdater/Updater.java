@@ -28,19 +28,18 @@ public class Updater {
         while (true) {
             try {
                 epoch = System.currentTimeMillis();
-//                if (epoch < nextExc) continue;
-//                nextExc = epoch + Main.config.options.updateTime;
+//              if (epoch < nextExc) continue;
+//              nextExc = epoch + Main.config.options.updateTime;
 
                 Thread.sleep(Main.config.options.updateTime); // better for cpu apparently
 
-
-                if(getIP().equals(ip) && !failed){
+                String tmpIp = getIP();
+                if(tmpIp.equals(ip) && !failed){
                     continue;
                 }
-                System.out.print("Updated ip " + ip);
-                ip = getIP();
-                UpdateDdns();
-                System.out.println(" ----------> " + ip + " on " + dateFormat.format(new Date(epoch)));
+                UpdateDdns(tmpIp);
+                System.out.println("Updated ip " + ip + " ----------> " + tmpIp + " on " + dateFormat.format(new Date(epoch)));
+                ip = tmpIp;
                 failed = false;
             } catch (Exception e) {
                 failed = true;
@@ -54,8 +53,8 @@ public class Updater {
         return EntityUtils.toString(client.execute(new HttpGet("https://api.ipify.org")).getEntity());
     }
 
-    public static void UpdateDdns() throws Exception{
-        post.setEntity(new StringEntity("{ \"name\": \"" + Main.config.options.ddnsName + "\",\"ipv4Address\": \""+ ip +"\",\"ttl\": 90,}", ContentType.APPLICATION_JSON));
+    public static void UpdateDdns(String _ip) throws Exception{
+        post.setEntity(new StringEntity("{ \"name\": \"" + Main.config.options.ddnsName + "\",\"ipv4Address\": \""+ _ip +"\",\"ttl\": 90,}", ContentType.APPLICATION_JSON));
         client.execute(post);
     }
 }
