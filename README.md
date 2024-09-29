@@ -21,6 +21,6 @@ Before running the project, ensure you have the following:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/DDNSUpdater.git
+   git clone https://github.com/redafex/DDNSUpdater.git
    cd DDNSUpdater
    mvn package
