@@ -37,6 +37,7 @@ public class Updater {
                 if(tmpIp.equals(ip) && !failed){
                     continue;
                 }
+                failed = true;
                 UpdateDdns(tmpIp);
                 System.out.println("Updated ip " + ip + " ----------> " + tmpIp + " on " + dateFormat.format(new Date(epoch)));
                 ip = tmpIp;
@@ -53,7 +54,7 @@ public class Updater {
         return EntityUtils.toString(client.execute(new HttpGet("https://api.ipify.org")).getEntity());
     }
 
-    public static void UpdateDdns(String _ip) throws Exception{
+    public static void UpdateDdns(String _ip) throws Exception {
         post.setEntity(new StringEntity("{ \"name\": \"" + Main.config.options.ddnsName + "\",\"ipv4Address\": \""+ _ip +"\",\"ttl\": 90,}", ContentType.APPLICATION_JSON));
         client.execute(post);
     }
